@@ -1,0 +1,20 @@
+<html>
+    <head>
+        <title>
+            Тест
+        </title>
+    </head>
+    <body>
+        <h1>
+            Тест
+        </h1>
+        <form method="post" action="test">
+            <h2>{{question}}</h2>
+            <input type="hidden" name="q_id" value="{{ q_id }}">
+            {% for answer in answers %}
+                <p><input type="radio" name="ans_text" value="{{answer}}"> {{answer}}</p>
+            {% endfor %}
+            <p><input type="submit" value="Ответить"></p>
+        </form>
+    </body>
+</html>
