@@ -1,0 +1,13 @@
+@import url('https://fonts.googleapis.com/css2?family=WDXL+Lubrifont+SC&display=swap');
+
+body{
+    background-color: rgb(20, 20, 20);
+    color: white;
+    font-family: "WDXL Lubrifont SC", sans-serif;
+    font-size: 20px;
+
+}
+
+[type="submit"]{
+    background-color: ;
+}

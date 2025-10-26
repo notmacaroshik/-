@@ -3,10 +3,21 @@
         <title>
             Результат
         </title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     </head>
     <body>
         <h1>
-            Результат: {{result}} из 6
+            Результат: {{result}} из {{count}}
         </h1>
+        {% if result == 0  %}
+            <p>ну ты лох</p>
+        {% elif result == count-1  %}
+            <p>ну блин одного не хватило</p>
+        {% elif result == count  %}
+            <p>крутой</p>
+        {% else %}
+            <p>попробуй еще раз</p>
+        {% endif %}
+
     </body>
 </html>

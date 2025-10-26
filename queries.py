@@ -29,8 +29,21 @@ SELECT quiz_content.id,
     WHERE quiz_content.question_id == questions.id
     AND quiz_content.id > ? AND quiz_content.quiz_id == ?
     ORDER BY quiz_content.id"""
-CHEK_RIGHTS = '''SELECT right_ans FROM questions
-            WHERE id == ?'''
+
+CHEK_RIGHTS = '''SELECT quiz_content.id, questions.question, questions.right_ans
+    FROM questions, quiz_content
+    WHERE quiz_content.id = ? AND (questions.right_ans LIKE ?)'''
+
+GET_FIRST = '''SELECT question_id
+    FROM quiz_content
+    WHERE quiz_id = ?
+    ORDER BY question_id
+    LIMIT 1'''
+
+COUNT_QS = '''SELECT COUNT(*)
+FROM quiz_content
+WHERE quiz_id = ?'''
+
 TABLES = ['quiz', 'questions', 'quiz_content']
 
 SELECT = 'SELECT * FROM '

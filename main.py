@@ -8,7 +8,7 @@ from random import shuffle
 
 def start_quiz(quiz_id):
     session['quiz_id'] = quiz_id
-    session['last_question'] = 1
+    session['last_question'] = db.execute(GET_FIRST, (quiz_id))[0][0]-1
     session['answer'] = 0
     session['total'] = 0
 def question_form(question):
@@ -26,12 +26,11 @@ def question_form(question):
 def save_answers():
     answer = request.form.get('ans_text')
     q_id = request.form.get('q_id')
-    print(db.execute(CHEK_RIGHTS, (q_id)))
-    print(q_id)
-    right_ans = db.execute(CHEK_RIGHTS, (q_id))[0][0]
-    if right_ans == answer:
+    right_ans = db.execute(CHEK_RIGHTS, (q_id, answer))
+    if right_ans is not None and len(right_ans) > 0:
         session['total'] += 1
-    session['last_question'] += 1
+    session['last_question'] = int(q_id)
+
 def end_quiz():
     session.clear()
 
@@ -42,22 +41,22 @@ def index():
         return render_template('index.html', quizes = quizes)
     else:
         quiz_id = request.form.get('викторина')
-        print(quiz_id)
         start_quiz(quiz_id)
-        questoin = db.execute(NEXT_QUESTION_ID, (quiz_id, 1))
         return redirect(url_for('test'))
             
 def test():
     if request.method == 'POST':
         save_answers()
-    next_question = db.execute(NEXT_QUESTION_ID, (session['quiz_id'],session['last_question']))
+    next_question = db.execute(NEXT_QUESTION_ID, (session['last_question'],session['quiz_id']))
     print(next_question)
     if next_question is None or len(next_question) == 0:
-        return redirect(url_for('test'))
+        return redirect(url_for('result'))
     else:
         return question_form(next_question[0])
+    
 def result():
-        return render_template('result.html', result = session['total'])
+        count = db.execute(COUNT_QS, session['quiz_id'])[0][0]
+        return render_template('result.html', result = session['total'], count = count)
         # url_for с первым параметром 'static' создаёт URL для статичного файла
         # redirect возвращает объект, который при вызове перенаправляет клиента на указанный адрес
         # (адрес для перенаправления указывается параметром функции redirect)
